@@ -12,7 +12,7 @@ class ExamDesktopApp extends StatelessWidget {
 
   static const _apiBaseUrl = String.fromEnvironment(
     'EXAM_API_URL',
-    defaultValue: 'http://localhost:3000',
+    defaultValue: 'https://api-examenes.aranadev.com',
   );
 
   @override

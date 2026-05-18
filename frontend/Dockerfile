@@ -1,6 +1,8 @@
 FROM node:24-alpine AS build
 
 WORKDIR /app
+ARG VITE_API_URL=https://api-examenes.aranadev.com
+ENV VITE_API_URL=$VITE_API_URL
 
 COPY package*.json ./
 RUN npm ci

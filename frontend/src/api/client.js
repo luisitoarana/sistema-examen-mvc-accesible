@@ -4,6 +4,12 @@
 const TEACHER_TOKEN_KEY = 'sistema-examen.teacherToken';
 const TEACHER_SESSION_KEY = 'sistema-examen.teacher';
 const STUDENT_TOKEN_KEY = 'sistema-examen.studentToken';
+const API_BASE_URL = (import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '');
+
+function apiUrl(path) {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${API_BASE_URL}${normalizedPath}`;
+}
 
 function readSessionStorage(key) {
   try {
@@ -52,7 +58,7 @@ export async function api(path, { method = 'GET', body, auth } = {}) {
       : null;
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(path, {
+  const response = await fetch(apiUrl(path), {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined

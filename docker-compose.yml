@@ -1,7 +1,10 @@
 services:
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: https://api-examenes.aranadev.com
     container_name: frontend
     restart: always
     ports:
@@ -15,6 +18,7 @@ services:
       - "4000:4000"
     environment:
       NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:-cambia_este_secreto_jwt_32_chars}
       DATABASE_URL: postgres://postgres:password@db:5432/examenes
       CORS_ORIGINS: https://examenes.aranadev.com,https://www.examenes.aranadev.com
     depends_on:
