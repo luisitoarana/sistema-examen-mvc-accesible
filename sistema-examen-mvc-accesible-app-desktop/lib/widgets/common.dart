@@ -6,18 +6,18 @@ class BrandMark extends StatelessWidget {
   const BrandMark({super.key});
   @override
   Widget build(BuildContext context) => Container(
-        width: 52,
-        height: 52,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppColors.ink,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Text(
-          'MVC',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-        ),
-      );
+    width: 52,
+    height: 52,
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      gradient: const LinearGradient(colors: [AppColors.ink, AppColors.navy]),
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: const Text(
+      'MVC',
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+    ),
+  );
 }
 
 class Surface extends StatelessWidget {
@@ -26,22 +26,22 @@ class Surface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x1F16201C),
-              blurRadius: 28,
-              offset: Offset(0, 14),
-            ),
-          ],
+    width: double.infinity,
+    padding: const EdgeInsets.all(22),
+    decoration: BoxDecoration(
+      color: AppColors.surface,
+      border: Border.all(color: AppColors.border),
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: const [
+        BoxShadow(
+          color: Color(0x1F16201C),
+          blurRadius: 28,
+          offset: Offset(0, 14),
         ),
-        child: child,
-      );
+      ],
+    ),
+    child: child,
+  );
 }
 
 class Notice extends StatelessWidget {
@@ -51,27 +51,24 @@ class Notice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        liveRegion: true,
-        label: text,
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.accentSoft,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFF9BC7BB)),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                busy ? Icons.sync : Icons.info,
-                color: AppColors.accentDeep,
-              ),
-              const SizedBox(width: 10),
-              Expanded(child: Text(text)),
-            ],
-          ),
-        ),
-      );
+    liveRegion: true,
+    label: text,
+    child: Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.accentSoft,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFF9BC7BB)),
+      ),
+      child: Row(
+        children: [
+          Icon(busy ? Icons.sync : Icons.info, color: AppColors.accentDeep),
+          const SizedBox(width: 10),
+          Expanded(child: Text(text)),
+        ],
+      ),
+    ),
+  );
 }
 
 class SectionTitle extends StatelessWidget {
@@ -87,32 +84,38 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: Row(
-          children: [
-            Icon(icon, color: AppColors.accentDeep, size: 34),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(color: AppColors.muted),
-                  ),
-                ],
-              ),
-            ),
-          ],
+    padding: const EdgeInsets.only(bottom: 16),
+    child: Row(
+      children: [
+        Container(
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(
+            color: AppColors.accentSoft,
+            shape: BoxShape.circle,
+            border: Border.all(color: const Color(0x339BC7BB)),
+          ),
+          child: Icon(icon, color: AppColors.accentDeep, size: 26),
         ),
-      );
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              Text(subtitle, style: const TextStyle(color: AppColors.muted)),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class AppTextInput extends StatelessWidget {
@@ -132,22 +135,18 @@ class AppTextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Semantics(
-          label: label,
-          hint: semanticHint,
-          textField: true,
-          child: TextField(
-            controller: controller,
-            obscureText: obscure,
-            decoration: InputDecoration(
-              labelText: label,
-              prefixIcon: Icon(icon),
-              border: const OutlineInputBorder(),
-            ),
-          ),
-        ),
-      );
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Semantics(
+      label: label,
+      hint: semanticHint,
+      textField: true,
+      child: TextField(
+        controller: controller,
+        obscureText: obscure,
+        decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon)),
+      ),
+    ),
+  );
 }
 
 class InfoItem {
@@ -196,16 +195,10 @@ class _InfoTile extends StatelessWidget {
         children: [
           Text(
             item.value,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-            ),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 2),
-          Text(
-            item.label,
-            style: const TextStyle(color: AppColors.muted),
-          ),
+          Text(item.label, style: const TextStyle(color: AppColors.muted)),
         ],
       ),
     );
@@ -225,20 +218,17 @@ class Metric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        elevation: 0,
-        color: AppColors.tile,
-        child: ListTile(
-          leading: Icon(icon, color: AppColors.accentDeep),
-          title: Text(label),
-          subtitle: Text(
-            value,
-            style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        ),
-      );
+    elevation: 0,
+    color: AppColors.tile,
+    child: ListTile(
+      leading: Icon(icon, color: AppColors.accentDeep),
+      title: Text(label),
+      subtitle: Text(
+        value,
+        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
+      ),
+    ),
+  );
 }
 
 class OptionChoice extends StatelessWidget {
@@ -254,43 +244,51 @@ class OptionChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        button: true,
-        selected: selected,
-        label: label,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8),
-          onTap: onTap,
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: selected ? AppColors.accentSoft : AppColors.tile,
-              border: Border.all(
-                color: selected ? AppColors.accent : AppColors.border,
-                width: selected ? 2 : 1,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  selected
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_off,
-                  color: AppColors.accent,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: const TextStyle(fontWeight: FontWeight.w800),
-                  ),
-                ),
-              ],
-            ),
+    button: true,
+    selected: selected,
+    label: label,
+    child: InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.accentSoft : AppColors.tile,
+          border: Border.all(
+            color: selected ? AppColors.accent : AppColors.border,
+            width: selected ? 2 : 1,
           ),
+          borderRadius: BorderRadius.circular(8),
         ),
-      );
+        child: Row(
+          children: [
+            Container(
+              width: 34,
+              height: 34,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: selected ? AppColors.accent : AppColors.ink,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                selected ? Icons.check : Icons.circle_outlined,
+                color: Colors.white,
+                size: 18,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(fontWeight: FontWeight.w800),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 class ExamRow extends StatelessWidget {
@@ -307,12 +305,38 @@ class ExamRow extends StatelessWidget {
   final VoidCallback onReview;
 
   @override
-  Widget build(BuildContext context) => ListTile(
-        contentPadding: const EdgeInsets.symmetric(vertical: 8),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
-        subtitle: Text('$subtitle\n$meta'),
-        trailing: FilledButton(onPressed: onReview, child: const Text('Revisar')),
-      );
+  Widget build(BuildContext context) => Container(
+    margin: const EdgeInsets.only(bottom: 10),
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
+              const SizedBox(height: 3),
+              Text(
+                '$subtitle\n$meta',
+                style: const TextStyle(color: AppColors.muted),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        FilledButton.icon(
+          onPressed: onReview,
+          icon: const Icon(Icons.fact_check),
+          label: const Text('Revisar'),
+        ),
+      ],
+    ),
+  );
 }
 
 class ReviewCard extends StatelessWidget {
@@ -332,31 +356,34 @@ class ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        elevation: 0,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        child: ExpansionTile(
-          title: Text(name, style: const TextStyle(fontWeight: FontWeight.w900)),
-          subtitle:
-              Text('$email - Nota $score - $status - ${events.length} incidentes'),
-          children: events.isEmpty
-              ? const [ListTile(title: Text('Sin incidentes registrados.'))]
-              : events
-                  .map((event) => ListTile(
-                        leading: const Icon(Icons.warning),
-                        title: Text(event['eventType']?.toString() ?? 'Evento'),
-                        subtitle: Text(event['details']?.toString() ?? ''),
-                      ))
-                  .toList(),
-        ),
-      );
+    elevation: 0,
+    color: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+      side: const BorderSide(color: AppColors.border),
+    ),
+    child: ExpansionTile(
+      title: Text(name, style: const TextStyle(fontWeight: FontWeight.w900)),
+      subtitle: Text(
+        '$email - Nota $score - $status - ${events.length} incidentes',
+      ),
+      children: events.isEmpty
+          ? const [ListTile(title: Text('Sin incidentes registrados.'))]
+          : events
+                .map(
+                  (event) => ListTile(
+                    leading: const Icon(Icons.warning),
+                    title: Text(event['eventType']?.toString() ?? 'Evento'),
+                    subtitle: Text(event['details']?.toString() ?? ''),
+                  ),
+                )
+                .toList(),
+    ),
+  );
 }
 
 Color severityColor(String severity) => switch (severity) {
-      'grave' => AppColors.danger,
-      'media' => AppColors.warning,
-      _ => AppColors.accent,
-    };
+  'grave' => AppColors.danger,
+  'media' => AppColors.warning,
+  _ => AppColors.accent,
+};

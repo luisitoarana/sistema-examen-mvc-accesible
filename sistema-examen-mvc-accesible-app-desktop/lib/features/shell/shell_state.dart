@@ -8,7 +8,7 @@ import '../../services/api_client.dart';
 import '../../services/error_format.dart';
 import '../../services/proctor_service.dart';
 
-enum AppMode { student, teacherAuth, teacherDashboard, exam, result }
+enum AppMode { preview, student, teacherAuth, teacherDashboard, exam, result }
 
 enum TeacherTab { dashboard, builder, review }
 
@@ -23,7 +23,7 @@ class ShellState extends ChangeNotifier {
   late final ProctorService proctor;
 
   // Modo y tab
-  AppMode mode = AppMode.student;
+  AppMode mode = AppMode.preview;
   TeacherTab teacherTab = TeacherTab.dashboard;
 
   // Sesiones
@@ -109,21 +109,21 @@ class ShellState extends ChangeNotifier {
 
   // Estudiante
   Future<void> startAttempt() => _runGuarded(() async {
-        final session = await api.startAttempt(
-          fullName: studentName.text,
-          email: studentEmail.text,
-          accessCode: examCode.text,
-        );
-        attempt = session;
-        result = null;
-        answers = {};
-        remaining = session.durationSeconds;
-        desktopEvents.clear();
-        notice = 'Examen iniciado. Supervision desktop activa.';
-        mode = AppMode.exam;
-        _startTimers();
-        proctor.start();
-      });
+    final session = await api.startAttempt(
+      fullName: studentName.text,
+      email: studentEmail.text,
+      accessCode: examCode.text,
+    );
+    attempt = session;
+    result = null;
+    answers = {};
+    remaining = session.durationSeconds;
+    desktopEvents.clear();
+    notice = 'Examen iniciado. Supervision desktop activa.';
+    mode = AppMode.exam;
+    _startTimers();
+    proctor.start();
+  });
 
   void answerQuestion(String questionId, String value) {
     answers[questionId] = value;
@@ -131,19 +131,19 @@ class ShellState extends ChangeNotifier {
   }
 
   Future<void> submitExam({bool auto = false}) => _runGuarded(() async {
-        final current = attempt;
-        if (current == null) return;
-        _stopExamSession();
-        final outcome = await api.submitAttempt(current.attemptId, answers);
-        result = outcome;
-        mode = AppMode.result;
-        notice = auto
-            ? 'Tiempo terminado. El examen fue enviado automaticamente.'
-            : 'Examen enviado.';
-      });
+    final current = attempt;
+    if (current == null) return;
+    _stopExamSession();
+    final outcome = await api.submitAttempt(current.attemptId, answers);
+    result = outcome;
+    mode = AppMode.result;
+    notice = auto
+        ? 'Tiempo terminado. El examen fue enviado automaticamente.'
+        : 'Examen enviado.';
+  });
 
   void resetStudent() {
-    mode = AppMode.student;
+    mode = AppMode.preview;
     attempt = null;
     result = null;
     desktopEvents.clear();
@@ -154,21 +154,18 @@ class ShellState extends ChangeNotifier {
 
   // Docente
   Future<void> teacherLogin({required bool register}) => _runGuarded(() async {
-        final session = register
-            ? await api.registerTeacher(
-                teacherName.text,
-                teacherEmail.text,
-                teacherPassword.text,
-              )
-            : await api.loginTeacher(
-                teacherEmail.text,
-                teacherPassword.text,
-              );
-        teacher = session;
-        mode = AppMode.teacherDashboard;
-        teacherTab = TeacherTab.dashboard;
-        notice = 'Sesion docente activa: ${session.fullName}.';
-      });
+    final session = register
+        ? await api.registerTeacher(
+            teacherName.text,
+            teacherEmail.text,
+            teacherPassword.text,
+          )
+        : await api.loginTeacher(teacherEmail.text, teacherPassword.text);
+    teacher = session;
+    mode = AppMode.teacherDashboard;
+    teacherTab = TeacherTab.dashboard;
+    notice = 'Sesion docente activa: ${session.fullName}.';
+  });
 
   void teacherLogout() {
     teacher = null;
@@ -179,24 +176,24 @@ class ShellState extends ChangeNotifier {
   }
 
   Future<void> createExam() => _runGuarded(() async {
-        final current = teacher;
-        if (current == null) {
-          throw Exception('Primero inicia sesion como docente.');
-        }
-        final created = await api.createExam(
-          teacherId: current.id,
-          createdBy: current.fullName,
-          title: builderTitle.text,
-          course: builderCourse.text,
-          accessCode: builderCode.text,
-          durationMinutes: int.tryParse(builderMinutes.text) ?? 10,
-          questions: builderQuestions,
-        );
-        reviewCode.text = created['accessCode']?.toString() ?? builderCode.text;
-        notice = 'Examen creado. Codigo: ${reviewCode.text}.';
-        mode = AppMode.teacherDashboard;
-        teacherTab = TeacherTab.review;
-      });
+    final current = teacher;
+    if (current == null) {
+      throw Exception('Primero inicia sesion como docente.');
+    }
+    final created = await api.createExam(
+      teacherId: current.id,
+      createdBy: current.fullName,
+      title: builderTitle.text,
+      course: builderCourse.text,
+      accessCode: builderCode.text,
+      durationMinutes: int.tryParse(builderMinutes.text) ?? 10,
+      questions: builderQuestions,
+    );
+    reviewCode.text = created['accessCode']?.toString() ?? builderCode.text;
+    notice = 'Examen creado. Codigo: ${reviewCode.text}.';
+    mode = AppMode.teacherDashboard;
+    teacherTab = TeacherTab.review;
+  });
 
   Future<List<dynamic>> loadTeacherExams() {
     final current = teacher;
@@ -283,15 +280,17 @@ class ShellState extends ChangeNotifier {
   }
 
   int navIndex() => switch (mode) {
-        AppMode.student || AppMode.exam || AppMode.result => 0,
-        AppMode.teacherAuth || AppMode.teacherDashboard => 1,
-      };
+    AppMode.preview || AppMode.student || AppMode.exam || AppMode.result => 0,
+    AppMode.teacherAuth || AppMode.teacherDashboard => 1,
+  };
 
   void navigateNav(int index) {
     if (index == 0) {
       switchMode(AppMode.student);
     } else if (index == 1) {
-      switchMode(teacher == null ? AppMode.teacherAuth : AppMode.teacherDashboard);
+      switchMode(
+        teacher == null ? AppMode.teacherAuth : AppMode.teacherDashboard,
+      );
     }
   }
 }

@@ -35,23 +35,26 @@ class TeacherAuthView extends StatelessWidget {
           obscure: true,
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
+        Row(
           children: [
-            FilledButton.icon(
-              onPressed: state.busy
-                  ? null
-                  : () => state.teacherLogin(register: false),
-              icon: const Icon(Icons.login),
-              label: const Text('Entrar al panel'),
+            Expanded(
+              child: FilledButton.icon(
+                onPressed: state.busy
+                    ? null
+                    : () => state.teacherLogin(register: false),
+                icon: const Icon(Icons.login),
+                label: const Text('Acceder al panel docente'),
+              ),
             ),
-            OutlinedButton.icon(
-              onPressed: state.busy
-                  ? null
-                  : () => state.teacherLogin(register: true),
-              icon: const Icon(Icons.person_add),
-              label: const Text('Crear cuenta docente'),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: state.busy
+                    ? null
+                    : () => state.teacherLogin(register: true),
+                icon: const Icon(Icons.person_add),
+                label: const Text('Crear cuenta docente'),
+              ),
             ),
           ],
         ),

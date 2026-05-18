@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BarChart3, ListChecks, Plus } from 'lucide-react';
+import { BarChart3, ListChecks, LogOut, Plus, UserRound } from 'lucide-react';
 import { session } from '../../api/client.js';
 import { TeacherAuth } from './TeacherAuth.jsx';
 import { TeacherDashboard } from './TeacherDashboard.jsx';
@@ -23,11 +23,18 @@ export function TeacherPanel() {
   return (
     <div className="teacher-panel">
       <div className="teacher-session">
-        <div>
-          <strong>{teacher.fullName}</strong>
-          <span>{teacher.email}</span>
+        <div className="teacher-identity">
+          <span className="teacher-avatar" aria-hidden="true"><UserRound /></span>
+          <div>
+            <span className="session-meta">Sesion docente activa</span>
+            <strong>{teacher.fullName}</strong>
+            <span>{teacher.email}</span>
+          </div>
         </div>
-        <button type="button" className="text-action" onClick={handleLogout}>Salir</button>
+        <button type="button" className="text-action" onClick={handleLogout}>
+          <LogOut aria-hidden="true" />
+          Salir
+        </button>
       </div>
       <div className="segmented-control compact" role="tablist" aria-label="Panel docente">
         <button

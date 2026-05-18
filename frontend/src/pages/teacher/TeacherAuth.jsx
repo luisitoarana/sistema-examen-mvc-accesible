@@ -42,7 +42,7 @@ export function TeacherAuth({ onTeacher }) {
           aria-selected={mode === 'login'}
           className={mode === 'login' ? 'active' : ''}
           onClick={() => setMode('login')}
-        >Ingresar</button>
+        >Acceder</button>
         <button
           type="button"
           role="tab"
@@ -76,7 +76,7 @@ export function TeacherAuth({ onTeacher }) {
       />
       <button className="primary-action" type="submit" disabled={busy}>
         <KeyRound aria-hidden="true" />
-        {busy ? 'Verificando' : mode === 'login' ? 'Entrar al panel' : 'Crear cuenta docente'}
+        {busy ? 'Verificando' : mode === 'login' ? 'Acceder al panel docente' : 'Crear cuenta docente'}
       </button>
     </form>
   );

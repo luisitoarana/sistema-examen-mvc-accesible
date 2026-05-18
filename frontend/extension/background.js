@@ -1,16 +1,29 @@
 const monitoredDomains = [
   'chatgpt.com',
+  'openai.com',
   'claude.ai',
   'copilot.microsoft.com',
   'gemini.google.com',
   'perplexity.ai',
   'poe.com',
+  'deepseek.com',
+  'chat.deepseek.com',
+  'facebook.com',
+  'instagram.com',
+  'tiktok.com',
+  'twitter.com',
+  'x.com',
+  'reddit.com',
+  'quora.com',
   'whatsapp.com',
   'web.whatsapp.com',
   'telegram.org',
   'youtube.com',
+  'youtu.be',
   'google.com',
-  'bing.com'
+  'bing.com',
+  'duckduckgo.com',
+  'search.yahoo.com'
 ];
 
 const searchHosts = new Map([
@@ -19,7 +32,39 @@ const searchHosts = new Map([
   ['www.bing.com', 'q'],
   ['bing.com', 'q'],
   ['duckduckgo.com', 'q'],
-  ['search.yahoo.com', 'p']
+  ['search.yahoo.com', 'p'],
+  ['search.brave.com', 'q'],
+  ['www.ecosia.org', 'q'],
+  ['yandex.com', 'text'],
+  ['www.youtube.com', 'search_query'],
+  ['youtube.com', 'search_query']
+]);
+
+const domainLabels = new Map([
+  ['chatgpt.com', 'ChatGPT'],
+  ['openai.com', 'OpenAI'],
+  ['claude.ai', 'Claude'],
+  ['copilot.microsoft.com', 'Microsoft Copilot'],
+  ['gemini.google.com', 'Gemini'],
+  ['perplexity.ai', 'Perplexity'],
+  ['poe.com', 'Poe'],
+  ['deepseek.com', 'DeepSeek'],
+  ['facebook.com', 'Facebook'],
+  ['instagram.com', 'Instagram'],
+  ['tiktok.com', 'TikTok'],
+  ['twitter.com', 'Twitter/X'],
+  ['x.com', 'Twitter/X'],
+  ['reddit.com', 'Reddit'],
+  ['quora.com', 'Quora'],
+  ['whatsapp.com', 'WhatsApp'],
+  ['web.whatsapp.com', 'WhatsApp Web'],
+  ['telegram.org', 'Telegram'],
+  ['youtube.com', 'YouTube'],
+  ['youtu.be', 'YouTube'],
+  ['google.com', 'Google'],
+  ['bing.com', 'Bing'],
+  ['duckduckgo.com', 'DuckDuckGo'],
+  ['search.yahoo.com', 'Yahoo Search']
 ]);
 
 let session = null;
@@ -107,12 +152,13 @@ function reportUrl(rawUrl, eventType, title) {
   const searchParam = searchHosts.get(parsed.hostname) ?? searchHosts.get(host);
   const query = searchParam ? parsed.searchParams.get(searchParam) : '';
   const monitored = monitoredDomains.some((domain) => host === domain || host.endsWith(`.${domain}`));
+  const siteName = friendlySiteName(host);
   const severity = monitored || query ? 'grave' : 'media';
   const reason = query
-    ? `Busqueda detectada en ${host}: "${query}"`
+    ? `Busqueda detectada en ${siteName} (${host}): "${query}"`
     : monitored
-      ? `Sitio restringido detectado: ${host}`
-      : `Navegacion fuera del examen: ${host || rawUrl}`;
+      ? `Sitio restringido detectado: ${siteName} (${host})`
+      : `Navegacion fuera del examen: ${siteName} (${host || rawUrl})`;
 
   reportEvent(query ? 'search_detected' : eventType, reason, {
     url: rawUrl,
@@ -165,4 +211,12 @@ function normalizeSeverity(value) {
   if (value === 'medium') return 'media';
   if (value === 'high') return 'grave';
   return 'media';
+}
+
+function friendlySiteName(host) {
+  for (const [domain, label] of domainLabels.entries()) {
+    if (host === domain || host.endsWith(`.${domain}`)) return label;
+  }
+  const name = host.split('.').filter(Boolean).at(-2) ?? host;
+  return name ? name.charAt(0).toUpperCase() + name.slice(1) : 'sitio externo';
 }

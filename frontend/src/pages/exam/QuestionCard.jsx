@@ -1,4 +1,5 @@
 import React from 'react';
+import { Volume2 } from 'lucide-react';
 import { speak } from '../../utils/format.js';
 import { questionTypes } from '../../utils/labels.js';
 
@@ -7,20 +8,42 @@ export function QuestionCard({ question, index, answers, setAnswers }) {
     setAnswers((current) => ({ ...current, [question.id]: value }));
   }
 
+  function optionLabel(optionId) {
+    if (optionId === 'true') return 'Verdadero';
+    if (optionId === 'false') return 'Falso';
+    return optionId.toUpperCase();
+  }
+
+  function readQuestionAndAnswers() {
+    const selected = answers[question.id];
+    const optionsText = question.questionType === 'short_answer'
+      ? 'Respuesta corta. Escribe tu respuesta en el campo.'
+      : question.options
+        .map((option) => `Opcion ${optionLabel(option.id)}: ${option.text}.`)
+        .join(' ');
+    const selectedText = selected
+      ? `Respuesta seleccionada: ${optionLabel(selected)}.`
+      : 'Todavia no hay respuesta seleccionada.';
+    speak(`Pregunta ${index + 1}. ${question.prompt}. ${optionsText} ${selectedText}`);
+  }
+
   return (
     <fieldset className="question-card">
       <legend>
         <span>Pregunta {index + 1} - {questionTypes[question.questionType]}</span>
         {question.prompt}
       </legend>
-      <button
-        className="voice-action"
-        type="button"
-        onClick={() => speak(`Pregunta ${index + 1}. ${question.prompt}`)}
-        aria-label={`Leer pregunta ${index + 1} en voz alta`}
-      >
-        Leer pregunta
-      </button>
+      <div className="question-toolbar">
+        <button
+          className="voice-action"
+          type="button"
+          onClick={readQuestionAndAnswers}
+          aria-label={`Leer pregunta ${index + 1} y sus respuestas en voz alta`}
+        >
+          <Volume2 aria-hidden="true" />
+          Leer pregunta y respuestas
+        </button>
+      </div>
       {question.questionType === 'short_answer' ? (
         <div className="short-answer">
           <label htmlFor={`answer-${question.id}`}>Respuesta</label>

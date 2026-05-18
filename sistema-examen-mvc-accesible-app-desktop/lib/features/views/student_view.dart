@@ -42,23 +42,25 @@ class StudentView extends StatelessWidget {
         FilledButton.icon(
           onPressed: state.busy ? null : state.startAttempt,
           icon: const Icon(Icons.play_arrow),
-          label: const Text('Ingresar al examen'),
+          label: const Text('Continuar como estudiante'),
         ),
         const SizedBox(height: 18),
-        const InfoGrid(items: [
-          InfoItem(
-            'Anti-copia web',
-            'Bloqueo de acciones dentro del examen.',
-          ),
-          InfoItem(
-            'Agente desktop',
-            'Detecta ventana, proceso y titulo activo.',
-          ),
-          InfoItem(
-            'Accesibilidad',
-            'Lectura por voz de pregunta y respuestas.',
-          ),
-        ]),
+        const InfoGrid(
+          items: [
+            InfoItem(
+              'Anti-copia web',
+              'Bloqueo de acciones dentro del examen.',
+            ),
+            InfoItem(
+              'Agente desktop',
+              'Detecta ventana, proceso y titulo activo.',
+            ),
+            InfoItem(
+              'Accesibilidad',
+              'Lectura por voz de pregunta y respuestas.',
+            ),
+          ],
+        ),
       ],
     );
   }

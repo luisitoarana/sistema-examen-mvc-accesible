@@ -17,8 +17,9 @@ class ExamView extends StatelessWidget {
     if (current == null) {
       return Surface(child: const Text('No hay un intento activo.'));
     }
-    final answered =
-        state.answers.values.where((value) => value.trim().isNotEmpty).length;
+    final answered = state.answers.values
+        .where((value) => value.trim().isNotEmpty)
+        .length;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -138,8 +139,8 @@ class _ExamQuestionCard extends StatelessWidget {
       final label = option.id == 'true'
           ? 'Verdadero'
           : option.id == 'false'
-              ? 'Falso'
-              : option.id.toUpperCase();
+          ? 'Falso'
+          : option.id.toUpperCase();
       buffer.write('Opcion $label: ${option.text}. ');
     }
     WindowsSpeech.say(buffer.toString());
@@ -159,28 +160,27 @@ class _ExamQuestionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(children: [
-              Expanded(
-                child: Text(
-                  'Pregunta ${index + 1} - ${labelQuestionType(question.questionType)}',
-                  style: const TextStyle(
-                    color: AppColors.accentDeep,
-                    fontWeight: FontWeight.w900,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Pregunta ${index + 1} - ${labelQuestionType(question.questionType)}',
+                    style: const TextStyle(
+                      color: AppColors.accentDeep,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                tooltip: 'Leer pregunta y respuestas',
-                onPressed: _speakQuestion,
-                icon: const Icon(Icons.volume_up),
-              ),
-            ]),
+                OutlinedButton.icon(
+                  onPressed: _speakQuestion,
+                  icon: const Icon(Icons.volume_up),
+                  label: const Text('Leer pregunta y respuestas'),
+                ),
+              ],
+            ),
             Text(
               question.prompt,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-              ),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 12),
             if (question.questionType == 'short_answer')
@@ -189,8 +189,7 @@ class _ExamQuestionCard extends StatelessWidget {
                   labelText: 'Respuesta',
                   border: OutlineInputBorder(),
                 ),
-                onChanged: (value) =>
-                    state.answerQuestion(question.id, value),
+                onChanged: (value) => state.answerQuestion(question.id, value),
               )
             else
               for (final option in question.options)

@@ -37,7 +37,64 @@ ThemeData buildAppTheme() {
     fontFamily: 'Segoe UI',
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(),
+      filled: true,
+      fillColor: Colors.white,
       isDense: true,
+      prefixIconColor: AppColors.accentDeep,
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.accent, width: 2),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AppColors.border),
+      ),
+      labelStyle: TextStyle(fontWeight: FontWeight.w700),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        minimumSize: const Size(0, 48),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        foregroundColor: Colors.white,
+        backgroundColor: AppColors.accentDeep,
+        disabledBackgroundColor: AppColors.border,
+        disabledForegroundColor: AppColors.muted,
+        textStyle: const TextStyle(fontWeight: FontWeight.w900),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(0, 48),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        foregroundColor: AppColors.navy,
+        backgroundColor: AppColors.surface,
+        side: const BorderSide(color: AppColors.navy, width: 1.5),
+        textStyle: const TextStyle(fontWeight: FontWeight.w900),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        minimumSize: const Size(0, 44),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        foregroundColor: AppColors.danger,
+        backgroundColor: const Color(0xFFFFF4F1),
+        textStyle: const TextStyle(fontWeight: FontWeight.w900),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(999),
+          side: const BorderSide(color: Color(0x55A12626)),
+        ),
+      ),
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: SegmentedButton.styleFrom(
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.ink,
+        selectedBackgroundColor: AppColors.ink,
+        selectedForegroundColor: Colors.white,
+        side: const BorderSide(color: AppColors.border),
+        textStyle: const TextStyle(fontWeight: FontWeight.w900),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
     ),
     cardTheme: CardThemeData(
       color: AppColors.surface,

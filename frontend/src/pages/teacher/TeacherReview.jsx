@@ -110,10 +110,12 @@ export function TeacherReview({ accessCodeSeed = 'HCI2026' }) {
                 <strong>{attempt.fullName}</strong>
                 <span>{attempt.email} - {attempt.incidentCount} penalizaciones</span>
                 {attempt.events.length > 0 ? attempt.events.map((event) => (
-                  <p key={`${event.createdAt}-${event.eventType}`}>
-                    <strong>{labelSeverity(event.severity)}</strong>
-                    {' · '}{labelSource(event.source)}
-                    {' · '}{labelEvent(event.eventType)}: {event.details}
+                  <p className="event-line" key={`${event.createdAt}-${event.eventType}`}>
+                    <span className={`severity-badge ${event.severity}`}>
+                      {labelSeverity(event.severity)}
+                    </span>
+                    <strong>{labelSource(event.source)}</strong>
+                    <span>{labelEvent(event.eventType)}: {event.details}</span>
                   </p>
                 )) : <p>Sin incidentes registrados.</p>}
               </article>

@@ -66,7 +66,7 @@ export function StudentLogin({ errors, onStarted }) {
         aria-label="Ingresar al examen con codigo institucional"
       >
         <KeyRound aria-hidden="true" />
-        {busy ? 'Verificando' : 'Ingresar al examen'}
+        {busy ? 'Verificando' : 'Continuar como estudiante'}
       </button>
     </form>
   );
